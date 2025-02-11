@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Me Perdoa? 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Quicksand:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FFD6E0 0%, #FFC3D6 100%);
+      font-family: 'Quicksand', sans-serif;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-family: 'Lobster', cursive;
+      font-size: 3rem;
+      color: #B30052;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      color: #B30052;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .envelope-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .envelope {
+      width: 130px;
+      height: 90px;
+      perspective: 600px;
+      cursor: pointer;
+      position: relative;
+    }
+    .envelope-inner {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+    }
+    .envelope-back {
+      background: #ffcce0;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      backface-visibility: hidden;
+    }
+    .envelope-front {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      background: #ffcce0;
+      backface-visibility: hidden;
+      transform: rotateX(180deg);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .envelope-front::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-left: 65px solid transparent;
+      border-right: 65px solid transparent;
+      border-bottom: 40px solid #ffabc4;
+      transform: translateY(-20px);
+      border-radius: 4px;
+    }
+    .envelope-front::after,
+    .envelope-back::after {
+      content: "💌";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+    }
+    .envelope.open .envelope-inner {
+      transform: rotateX(180deg);
+    }
+    .letter {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 2rem;
+      width: 300px;
+      max-width: 80%;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 999;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(2px);
+      z-index: 998;
+    }
+    .close-btn {
+      background: #ff6392;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s;
+    }
+    .close-btn:hover {
+      background: #ff336e;
+    }
+    footer {
+      font-size: 0.9rem;
+      color: #B30052;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: auto;
+    }
+    .player-container {
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    audio {
+      width: 300px;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Me Perdoa? 💖</h1>
+  <h2>Clique em um envelope para abrir seu conteúdo.</h2>
+  <div class="envelope-container">
+    <div id="envelope1" class="envelope">
+      <div class="envelope-inner">
+        <div class="envelope-back"></div>
+        <div class="envelope-front"></div>
+      </div>
+    </div>
+    <div id="envelope2" class="envelope">
+      <div class="envelope-inner">
+        <div class="envelope-back"></div>
+        <div class="envelope-front"></div>
+      </div>
+    </div>
+    <div id="envelope3" class="envelope">
+      <div class="envelope-inner">
+        <div class="envelope-back"></div>
+        <div class="envelope-front"></div>
+      </div>
+    </div>
+  </div>
+  <div id="overlay" class="overlay"></div>
+  <div id="letter1" class="letter">
+    <p style="font-size:1.1rem;">
+      Amor, me perdoa por ter te magoado tanto, você é a mulher mais incrível que eu já conheci
+    </p>
+    <p>
+      Quero ficar ao eu lado porque seu sorriso me faz me sentir forte, sinto que por você eu conquistaria o mundo
+    </p>
+    <button class="close-btn" onclick="closeLetter(1)">Fechar</button>
+  </div>
+  <div id="letter2" class="letter">
+    <p style="font-size:1.1rem;">
+      Eu me imagino voltando para casa todos os dias ansioso para te abraçar e mostrar o quanto você é amada
+    </p>
+    <p>
+      ia te fazer uma declaração nova todos os dias, até mesmo quando ficarmos velhinhos juntos
+    </p>
+    <button class="close-btn" onclick="closeLetter(2)">Fechar</button>
+  </div>
+  <div id="letter3" class="letter">
+    <p style="font-size:1.1rem;">
+      Eu construiria uma família com você e faria de você a mulher mais feliz do mundo, faria de tudo pelo seu sorriso
+    </p>
+    <p>
+      Fico imaginando acordar todos os dias ao seu lado, sentindo seu calor e cuidando de você
+      <br/><strong>Eu quero você comigo até o final da minha vida</strong>
+    </p>
+    <button class="close-btn" onclick="closeLetter(3)">Fechar</button>
+  </div>
+  <footer>
+    <div class="player-container bold">
+      <span>Nossa Música</span>
+      <audio id="bgMusic" controls autoplay loop>
+        <source src="musga.mp3" type="audio/mpeg"/>
+      </audio>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
